@@ -245,6 +245,14 @@ const valorProducto = document.getElementById("valorproducto")
 //})
 const productosAgregados = [];
 let posicionLS = 0;
+const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
+
+for (let i=0; i<prodDesdeObj.length; i++){
+const prodDesdeLS = document.createElement('li');
+prodDesdeLS.innerHTML = "Nombre Producto: " + prodDesdeObj[i].nombre + "; Costo: " + prodDesdeObj[i].precio + '<div class="mb-2 mt-2"> <label for="nuevo" class="form-label">Cantidad</label> <input type="text" class="form-control" id="nuevo" placeholder="Ej: 10" name="nuevo"> </div>'
+listaProductos.append(prodDesdeLS);
+}
+
 
 agregarProducto.addEventListener ('submit', (e) =>{
     e.preventDefault();
@@ -252,6 +260,9 @@ agregarProducto.addEventListener ('submit', (e) =>{
     const nuevoNombreProducto = nombreProducto.value;
     const nuevoValorProducto = valorProducto.value;
     const encontrado = productos.some ((el) => el.nombre == nuevoNombreProducto);
+
+    //console.log(prodDesdeObj)
+
     if (productoIngresado == true){
         aviso.remove();
         productoIngresado = false;
@@ -267,8 +278,8 @@ agregarProducto.addEventListener ('submit', (e) =>{
         aviso = document.createElement("p");
         aviso.innerText = "Producto ingresado exitosamente en el sistema";
         agregarProducto.append (aviso);
-        const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
-        console.log(prodDesdeObj)
+        //const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
+        //console.log(prodDesdeObj)
         const li = document.createElement('li');
         li.innerHTML = "Nombre Producto: " + productos[posicionArrayProductos].nombre + "; Costo: " + productos[posicionArrayProductos].precio + '<div class="mb-2 mt-2"> <label for="nuevo" class="form-label">Cantidad</label> <input type="text" class="form-control" id="nuevo" placeholder="Ej: 10" name="nuevo"> </div>'
         //li.innerHTML = `<h3> ID: ${producto.id}</h3>
@@ -280,6 +291,7 @@ agregarProducto.addEventListener ('submit', (e) =>{
         posicionLS++;
         const prodEnJson = JSON.stringify(productosAgregados)
         localStorage.setItem("productos", prodEnJson)
+        
 
     }else{
         //Si el producto existe en el sistema, no lo agregará y enviará un mensaje de que ya existe
