@@ -2,6 +2,7 @@ let eleccion = true;
 let continuar = true;
 let envio = 0;
 let precioProducto = 0;
+console.log(document.body)
 
 //Se crea función constructora de Producto
 function Producto (id, nombre, precio){
@@ -58,10 +59,14 @@ while(continuar == true){
     }
 }
 
+//console.log (document.head);
+//const regiones = document.getElementsByClassName("region");
+//console.log (regiones);
+
 let seguir = true;
 let cantidad = 0;
 //let precio = 0;
-let precioTotal = 0;
+//let precioTotal = 0;
 
 function calcularPrecioTotal (precio, cantidad){
     precioTotal = precioTotal + (precio * cantidad)
@@ -69,7 +74,7 @@ function calcularPrecioTotal (precio, cantidad){
 
 let contador = 1;
 
-while(seguir == true){
+/*while(seguir == true){
 
     let productosOfrecidos = "";
 
@@ -105,39 +110,229 @@ while(seguir == true){
         alert ("Opción no válida");
     }
 
-}
+}*/
 
-let precioTotalConEnvio = precioTotal + envio;
+//let precioTotalConEnvio = precioTotal + envio;
 
-alert ("Tu pedido tendrá el valor total de" + " " + precioTotalConEnvio)
+//alert ("Tu pedido tendrá el valor total de" + " " + precioTotalConEnvio)
 
-}
+//}
 
-if (inicio == 2){
+//if (inicio == 2){
 
-    let nuevoNombreProducto = prompt ("Favor ingresar nombre del producto a agregar");
-    let nuevoPrecioProducto = prompt ("Favor ingresar precio del producto a agregar");
-    nuevoPrecioProducto = parseInt (nuevoPrecioProducto);
+    //let nuevoNombreProducto = prompt ("Favor ingresar nombre del producto a agregar");
+    //let nuevoPrecioProducto = prompt ("Favor ingresar precio del producto a agregar");
+    //nuevoPrecioProducto = parseInt (nuevoPrecioProducto);
 
     //Se utilizará función "some" para encontrar si el producto existe o no en el arreglo productos
+    //const encontrado = productos.some ((el) => el.nombre == nuevoNombreProducto);
+    //console.log (encontrado);
+
+    //if (encontrado == false){
+        //Si el producto no existe, lo agregará en el sistema
+    //    let posicionArrayProductos= productos.length
+    //    productos [posicionArrayProductos] = new Producto (posicionArrayProductos + 1, nuevoNombreProducto, nuevoPrecioProducto);
+    //    alert ("Producto ingresado exitosamente en el sistema");
+    //    console.log (productos);
+
+    //}else{
+        //Si el producto existe en el sistema, no lo agregará y enviará un mensaje de que ya existe
+    //    alert ("Producto ya se encuentra ingresado en el sistema");
+    //}
+
+}else{
+    
+   eleccion = false;
+   alert ("¡Que estés muy bien!");
+}
+//}
+const seleccionar = document.getElementById("seleccionar");
+const regiones = document.getElementsByClassName("region");
+let valueRegion;
+let precioEnvio = 0; //simil a variable envio
+let mensaje;
+let ingresado = false;
+
+document.getElementById("region").addEventListener('change', (event) => {
+    console.log(event.target.value)
+    valueRegion = event.target.value
+    if (ingresado == true){
+        mensaje.remove();
+        ingresado = false;
+    }
+    if (valueRegion == "metropolitana"){
+        precioEnvio = 2000;
+    }
+    if (valueRegion == "valpoohigins"){
+        precioEnvio = 4000;
+    }
+    if (valueRegion == "otrasregiones"){
+        precioEnvio = 8000;
+    }
+    mensaje = document.createElement("p")
+    mensaje.innerText = "El precio del envío es " + precioEnvio ;
+    seleccionar.append (mensaje)
+    ingresado = true;
+    alert (precioEnvio)
+    return precioEnvio;
+})
+
+//console.log(precioEnvio)
+
+const agregarCantidad = document.getElementById("form");
+const cantidadfigder = document.getElementById("cantidadfigder")
+const formControl = document.getElementsByClassName("form-control")
+let precioTotalSinEnvio;
+let precioTotalConEnvio;
+let precioTotal;
+
+//nombreProducto.addEventListener('input', () =>{
+//    console.log(nombreProducto.value)
+//})
+
+agregarCantidad.addEventListener ('submit', (e) =>{
+    e.preventDefault();
+    let precioSinEnvio = 0;
+
+    for (let i=0; i<productos.length; i++){
+    cantidad = formControl[i].value;
+    //alert (formControl[i].value)
+    precioProducto = productos [i].precio;
+    alert (precioProducto*cantidad);
+    precioSinEnvio = precioSinEnvio + (precioProducto * cantidad)
+    }
+
+    alert ("El precio total sin envío es: " + precioSinEnvio);
+    precioTotalSinEnvio = document.createElement("p");
+    precioTotalSinEnvio.innerText = "El precio total sin envío es " + precioSinEnvio;
+    agregarCantidad.append (precioTotalSinEnvio);
+    precioTotal = precioSinEnvio + precioEnvio;
+    precioTotalConEnvio = document.createElement("p");
+    precioTotalConEnvio.innerText = "El precio total con envío es " + precioTotal;
+    agregarCantidad.append (precioTotalConEnvio);
+
+})
+
+const listaProductos = document.getElementById("listaproductos");
+
+//for (const producto of productos) {
+//    const li = document.createElement('li');
+//    li.innerHTML = producto.nombre;
+//    listaProductos.append(li);
+//}
+//}
+
+let aviso;
+let productoIngresado = false;
+
+const agregarProducto = document.getElementById("formulario");
+const nombreProducto = document.getElementById("nombreproducto");
+const valorProducto = document.getElementById("valorproducto")
+//nombreProducto.addEventListener('input', () =>{
+//    console.log(nombreProducto.value)
+//})
+
+agregarProducto.addEventListener ('submit', (e) =>{
+    e.preventDefault();
+    alert(nombreProducto.value);
+    const nuevoNombreProducto = nombreProducto.value;
+    const nuevoValorProducto = valorProducto.value;
     const encontrado = productos.some ((el) => el.nombre == nuevoNombreProducto);
+    if (productoIngresado == true){
+        aviso.remove();
+        productoIngresado = false;
+    }
     console.log (encontrado);
 
     if (encontrado == false){
         //Si el producto no existe, lo agregará en el sistema
+
         let posicionArrayProductos= productos.length
-        productos [posicionArrayProductos] = new Producto (posicionArrayProductos + 1, nuevoNombreProducto, nuevoPrecioProducto);
-        alert ("Producto ingresado exitosamente en el sistema");
-        console.log (productos);
+        productos [posicionArrayProductos] = new Producto (posicionArrayProductos + 1, nuevoNombreProducto, nuevoValorProducto);
+        //alert ("Producto ingresado exitosamente en el sistema");
+        aviso = document.createElement("p");
+        aviso.innerText = "Producto ingresado exitosamente en el sistema";
+        agregarProducto.append (aviso);
+        const li = document.createElement('li');
+        li.innerHTML = "Nombre Producto: " + productos[posicionArrayProductos].nombre + "; Costo :" + productos[posicionArrayProductos].precio;
+        listaProductos.append(li);
 
     }else{
         //Si el producto existe en el sistema, no lo agregará y enviará un mensaje de que ya existe
-        alert ("Producto ya se encuentra ingresado en el sistema");
+        //alert ("Producto ya se encuentra ingresado en el sistema");
+        
+        aviso = document.createElement("p");
+        aviso.innerText = "Producto ya se encuentra ingresado en el sistema";
+        agregarProducto.append (aviso);
     }
+    productoIngresado = true;
 
-}else{
+    //const listaP = document.getElementById("listaP");
+    //listaP.remove()
     
-    eleccion = false;
-    alert ("¡Que estés muy bien!");
+    //for (const producto of productos) {
+    //    const li = document.createElement('li');
+        //li.innerHTML = producto.nombre;
+    //    li.remove();
+    //}
+
+    //const li_inicial = document-getelementById("li_inicial");
+    //li_inicial.remove()
+
+    //listaProductos.remove();
+
+    //for (const producto of productos) {
+    //}
+
+});
+
+console.log(productos);
+
+
+//console.log (regiones);
+//console.log(regiones[1].value);
+//console.log(regiones[1]);
+//const regionValpo = regiones[1].value;
+//regionValpo.addEventListener('click', () =>{
+//    alert("Escogiste región de valpo")
+//})
+
+const seleccionarRegion = document.getElementById("regionvalpo")
+console.log(seleccionarRegion);
+
+//seleccionarRegion.addEventListener('change', () =>{
+//    alert("Escogiste región de valpo")
+//})
+
+
+//const clickProducto = document.getElementById("boton");
+//boton.addEventListener ("click",() =>{
+//    alert ("Enviaste")
+//})
+
+//const nombreProducto = document.getElementById("nombreproducto").value;
+
+//alert(nombreProducto)
+
+function validarFormulario (e){
+    e.preventDefault();
+    alert ("Formulario enviado");
+//    const nombreProducto = document.getElementById("nombreproducto").value;
+//    alert (nombreProducto);
 }
+
+//if (valueRegion == "metropolitana"){
+//    console.log ("Has escogido la Región Metropolitana")
+//}
+
+//const seleccionarRegion = document.getElementById("region")
+//console.log(seleccionarRegion);
+//seleccionarRegion.addEventListener('click', () =>{
+//    alert("Escogiste región")
+//})
+//document.body.addEventListener('click', ()=>{
+//    console.log("Escogiste región de valpo")
+//})
+
+//const metropolitana = regiones[0].value
 }
