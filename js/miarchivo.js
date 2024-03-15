@@ -2,7 +2,6 @@ let eleccion = true;
 let continuar = true;
 let envio = 0;
 let precioProducto = 0;
-console.log(document.body)
 
 //Se crea función constructora de Producto
 function Producto (id, nombre, precio){
@@ -25,9 +24,14 @@ productos[2] = producto3;
 productos[3] = producto4;
 productos[4] = producto5;
 
+/*const prodEnJson = JSON.stringify(productos)
+localStorage.setItem("productos", prodEnJson)
+const prodDesdeLS= JSON.parse(localStorage.getItem('productos'));
+console.log(prodDesdeLS)*/
+
 //console.log(productos);
 
-while (eleccion == true){
+/*while (eleccion == true){
 
 //La idea es que se elija entre la compra que efectuará el usuario o el mantenedor del Administrador de la Plataforma Ecommerce donde agregará productos en caso que requiera
 let inicio = prompt ("Favor elija qué desea realizar: \n1.- Compra usuario \n2.- Mantenedor Administrador\n3.- Salir");
@@ -35,10 +39,10 @@ inicio = parseInt (inicio);
 
 if (inicio == 1){
 
-while(continuar == true){
+while(continuar == true){*/
 
 // En primer lugar el usuario deberá escoger la opción de dirección de envío, puesto que el costo varía por lugar    
-    let direccion = prompt ("Favor seleccionar donde vives:\n 1.- Región Metropolitana\n 2.- Región de Valparaíso o Región de Libertador Bernardo O'Higgins\n 3.- Otras regiones");
+/*    let direccion = prompt ("Favor seleccionar donde vives:\n 1.- Región Metropolitana\n 2.- Región de Valparaíso o Región de Libertador Bernardo O'Higgins\n 3.- Otras regiones");
     direccion = parseInt (direccion);
     switch(direccion){
         case 1:
@@ -57,7 +61,7 @@ while(continuar == true){
             alert ("Opción incorrecta");
         break;
     }
-}
+}*/
 
 //console.log (document.head);
 //const regiones = document.getElementsByClassName("region");
@@ -140,11 +144,11 @@ let contador = 1;
     //    alert ("Producto ya se encuentra ingresado en el sistema");
     //}
 
-}else{
+/*}else{
     
    eleccion = false;
    alert ("¡Que estés muy bien!");
-}
+}*/
 //}
 const seleccionar = document.getElementById("seleccionar");
 const regiones = document.getElementsByClassName("region");
@@ -179,12 +183,13 @@ document.getElementById("region").addEventListener('change', (event) => {
 
 //console.log(precioEnvio)
 
-const agregarCantidad = document.getElementById("form");
+const agregarCantidad = document.getElementById("prod");
 const cantidadfigder = document.getElementById("cantidadfigder")
 const formControl = document.getElementsByClassName("form-control")
 let precioTotalSinEnvio;
 let precioTotalConEnvio;
 let precioTotal;
+let calculoIngresado = false;
 
 //nombreProducto.addEventListener('input', () =>{
 //    console.log(nombreProducto.value)
@@ -202,6 +207,12 @@ agregarCantidad.addEventListener ('submit', (e) =>{
     precioSinEnvio = precioSinEnvio + (precioProducto * cantidad)
     }
 
+    if (calculoIngresado == true){
+        precioTotalSinEnvio.remove();
+        precioTotalConEnvio.remove();
+        calculoIngresadoIngresado = false;
+    }
+
     alert ("El precio total sin envío es: " + precioSinEnvio);
     precioTotalSinEnvio = document.createElement("p");
     precioTotalSinEnvio.innerText = "El precio total sin envío es " + precioSinEnvio;
@@ -210,6 +221,7 @@ agregarCantidad.addEventListener ('submit', (e) =>{
     precioTotalConEnvio = document.createElement("p");
     precioTotalConEnvio.innerText = "El precio total con envío es " + precioTotal;
     agregarCantidad.append (precioTotalConEnvio);
+    calculoIngresado = true;
 
 })
 
@@ -231,6 +243,8 @@ const valorProducto = document.getElementById("valorproducto")
 //nombreProducto.addEventListener('input', () =>{
 //    console.log(nombreProducto.value)
 //})
+const productosAgregados = [];
+let posicionLS = 0;
 
 agregarProducto.addEventListener ('submit', (e) =>{
     e.preventDefault();
@@ -253,9 +267,19 @@ agregarProducto.addEventListener ('submit', (e) =>{
         aviso = document.createElement("p");
         aviso.innerText = "Producto ingresado exitosamente en el sistema";
         agregarProducto.append (aviso);
+        const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
+        console.log(prodDesdeObj)
         const li = document.createElement('li');
-        li.innerHTML = "Nombre Producto: " + productos[posicionArrayProductos].nombre + "; Costo :" + productos[posicionArrayProductos].precio;
+        li.innerHTML = "Nombre Producto: " + productos[posicionArrayProductos].nombre + "; Costo: " + productos[posicionArrayProductos].precio + '<div class="mb-2 mt-2"> <label for="nuevo" class="form-label">Cantidad</label> <input type="text" class="form-control" id="nuevo" placeholder="Ej: 10" name="nuevo"> </div>'
+        //li.innerHTML = `<h3> ID: ${producto.id}</h3>
+        //                <p>  Producto: ${producto.nombre}</p>
+        //                <b> $ ${producto.precio}</b>`;
+
         listaProductos.append(li);
+        productosAgregados[posicionLS] = productos[posicionArrayProductos];
+        posicionLS++;
+        const prodEnJson = JSON.stringify(productosAgregados)
+        localStorage.setItem("productos", prodEnJson)
 
     }else{
         //Si el producto existe en el sistema, no lo agregará y enviará un mensaje de que ya existe
@@ -335,4 +359,8 @@ function validarFormulario (e){
 //})
 
 //const metropolitana = regiones[0].value
-}
+//const prodEnJson = JSON.stringify(productos)
+//localStorage.setItem("productos", prodEnJson)
+const prodDesdeLS= JSON.parse(localStorage.getItem("productos"));
+console.log(prodDesdeLS)
+
