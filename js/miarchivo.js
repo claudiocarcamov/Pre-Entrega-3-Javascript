@@ -2,6 +2,12 @@ let eleccion = true;
 let continuar = true;
 let envio = 0;
 let precioProducto = 0;
+const productosAgregados = [];
+const productos = [];
+let posicionLS = 0;
+//const prodEnJson = JSON.stringify(productos);
+//Si se debe agregar o quitar
+const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
 
 //Se crea función constructora de Producto
 function Producto (id, nombre, precio){
@@ -17,12 +23,20 @@ const producto3 = new Producto (3,"Bob Esponja",10000);
 const producto4 = new Producto (4,"Calamardo",8500);
 const producto5 = new Producto (5,"Goku",15000);
 
-const productos = [];
+//const productos = [];
 productos[0] = producto1;
 productos[1] = producto2;
 productos[2] = producto3;
 productos[3] = producto4;
 productos[4] = producto5;
+
+/*posicionProductos = 5
+for (let i=0; i<prodDesdeObj.length; i++){
+    productos[posicionProductos] = prodDesdeObj[i];
+    posicionProductos++
+}
+
+console.log(productos)*/
 
 /*const prodEnJson = JSON.stringify(productos)
 localStorage.setItem("productos", prodEnJson)
@@ -177,7 +191,7 @@ document.getElementById("region").addEventListener('change', (event) => {
     mensaje.innerText = "El precio del envío es " + precioEnvio ;
     seleccionar.append (mensaje)
     ingresado = true;
-    alert (precioEnvio)
+    //alert (precioEnvio)
     return precioEnvio;
 })
 
@@ -198,13 +212,15 @@ let calculoIngresado = false;
 agregarCantidad.addEventListener ('submit', (e) =>{
     e.preventDefault();
     let precioSinEnvio = 0;
-
+    
     for (let i=0; i<productos.length; i++){
     cantidad = formControl[i].value;
     //alert (formControl[i].value)
     precioProducto = productos [i].precio;
-    alert (precioProducto*cantidad);
+    //alert (precioProducto*cantidad);
     precioSinEnvio = precioSinEnvio + (precioProducto * cantidad)
+    console.log(cantidad);
+    console.log(precioProducto);
     }
 
     if (calculoIngresado == true){
@@ -213,7 +229,7 @@ agregarCantidad.addEventListener ('submit', (e) =>{
         calculoIngresadoIngresado = false;
     }
 
-    alert ("El precio total sin envío es: " + precioSinEnvio);
+    //alert ("El precio total sin envío es: " + precioSinEnvio);
     precioTotalSinEnvio = document.createElement("p");
     precioTotalSinEnvio.innerText = "El precio total sin envío es " + precioSinEnvio;
     agregarCantidad.append (precioTotalSinEnvio);
@@ -243,22 +259,23 @@ const valorProducto = document.getElementById("valorproducto")
 //nombreProducto.addEventListener('input', () =>{
 //    console.log(nombreProducto.value)
 //})
-const productosAgregados = [];
-let posicionLS = 0;
-const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
+//const prodDesdeObj = JSON.parse(localStorage.getItem("productos"))
 
-for (let i=0; i<prodDesdeObj.length; i++){
-const prodDesdeLS = document.createElement('li');
-prodDesdeLS.innerHTML = "Nombre Producto: " + prodDesdeObj[i].nombre + "; Costo: " + prodDesdeObj[i].precio + '<div class="mb-2 mt-2"> <label for="nuevo" class="form-label">Cantidad</label> <input type="text" class="form-control" id="nuevo" placeholder="Ej: 10" name="nuevo"> </div>'
-listaProductos.append(prodDesdeLS);
+//Esto si se debe agregar o quitar
+for (i=5; i<prodDesdeObj.length; i++){
+    productos[i] = prodDesdeObj[i];
+    const prodDesdeLS = document.createElement('li');
+    prodDesdeLS.innerHTML = "Nombre Producto: " + prodDesdeObj[i].nombre + "; Costo: " + prodDesdeObj[i].precio + '<div class="mb-2 mt-2"> <label for="nuevo" class="form-label">Cantidad</label> <input type="text" class="form-control" id="nuevo" placeholder="Ej: 10" name="nuevo"> </div>'
+    listaProductos.append(prodDesdeLS);
 }
-
 
 agregarProducto.addEventListener ('submit', (e) =>{
     e.preventDefault();
-    alert(nombreProducto.value);
+    //alert(nombreProducto.value);
     const nuevoNombreProducto = nombreProducto.value;
-    const nuevoValorProducto = valorProducto.value;
+    //console.log (valorProducto.value);
+    //console.log(valorProducto.value);
+    const nuevoValorProducto = parseInt (valorProducto.value);
     const encontrado = productos.some ((el) => el.nombre == nuevoNombreProducto);
 
     //console.log(prodDesdeObj)
@@ -274,6 +291,7 @@ agregarProducto.addEventListener ('submit', (e) =>{
 
         let posicionArrayProductos= productos.length
         productos [posicionArrayProductos] = new Producto (posicionArrayProductos + 1, nuevoNombreProducto, nuevoValorProducto);
+        console.log(productos)
         //alert ("Producto ingresado exitosamente en el sistema");
         aviso = document.createElement("p");
         aviso.innerText = "Producto ingresado exitosamente en el sistema";
@@ -285,23 +303,31 @@ agregarProducto.addEventListener ('submit', (e) =>{
         //li.innerHTML = `<h3> ID: ${producto.id}</h3>
         //                <p>  Producto: ${producto.nombre}</p>
         //                <b> $ ${producto.precio}</b>`;
-
+        console.log(productos)
         listaProductos.append(li);
         productosAgregados[posicionLS] = productos[posicionArrayProductos];
+        console.log(productosAgregados);
+        //console.log("hola a todoooooooos")
         posicionLS++;
-        const prodEnJson = JSON.stringify(productosAgregados)
+        const prodEnJson = JSON.stringify(productos);
         localStorage.setItem("productos", prodEnJson)
+        console.log(prodEnJson)
+        //localStorage.setItem("productos", prodEnJson)
+        //Esto si se debe agregar
         
+        //console.log(prodEnJson)
+        //localStorage.setItem("productos", prodEnJson);
+        //console.log(prodEnJson);
 
     }else{
         //Si el producto existe en el sistema, no lo agregará y enviará un mensaje de que ya existe
-        //alert ("Producto ya se encuentra ingresado en el sistema");
         
         aviso = document.createElement("p");
         aviso.innerText = "Producto ya se encuentra ingresado en el sistema";
         agregarProducto.append (aviso);
     }
     productoIngresado = true;
+    return productos;
 
     //const listaP = document.getElementById("listaP");
     //listaP.remove()
@@ -321,9 +347,15 @@ agregarProducto.addEventListener ('submit', (e) =>{
     //}
 
 });
-
-console.log(productos);
-
+console.log(productosAgregados);
+console.log("hola")
+console.log(productos)
+//for(i=4; i<productos.length; i++){
+//    productosAgregados[posicionLS] = productos[i];
+//    console.log(productos[i])
+//    console.log("hola")
+//    posicionLS++
+//}
 
 //console.log (regiones);
 //console.log(regiones[1].value);
@@ -352,7 +384,7 @@ console.log(seleccionarRegion);
 
 function validarFormulario (e){
     e.preventDefault();
-    alert ("Formulario enviado");
+//    alert ("Formulario enviado");
 //    const nombreProducto = document.getElementById("nombreproducto").value;
 //    alert (nombreProducto);
 }
@@ -373,6 +405,14 @@ function validarFormulario (e){
 //const metropolitana = regiones[0].value
 //const prodEnJson = JSON.stringify(productos)
 //localStorage.setItem("productos", prodEnJson)
-const prodDesdeLS= JSON.parse(localStorage.getItem("productos"));
-console.log(prodDesdeLS)
 
+//Esto si se debe agregar
+//const prodDesdeLS= JSON.parse(localStorage.getItem("productos"));
+//console.log(prodDesdeLS)
+
+console.log(productos)
+
+console.log(productosAgregados)
+//console.log(prodEnJson)
+//const prodEnJson = JSON.stringify(productos);
+//localStorage.setItem("productos", prodEnJson)
